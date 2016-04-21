@@ -99,6 +99,15 @@ defmodule Bamboo.Phoenix do
 
   @doc """
   Sets the layout when rendering HTML templates
+
+  ## Example
+
+      def html_email_layout do
+        new_email
+        |> from("myapp@example.com")
+        # Will use MyApp.LayoutView with email.html layout when rendering
+        |> put_html_layout({MyApp.LayoutView, "email.html"})
+      end
   """
   def put_html_layout(email, layout) do
     email |> put_private(:html_layout, layout)
@@ -106,6 +115,15 @@ defmodule Bamboo.Phoenix do
 
   @doc """
   Sets the layout when rendering plain text templates
+
+  ## Example
+
+      def text_email_layout do
+        new_email
+        |> from("myapp@example.com")
+        # Will use MyApp.LayoutView with email.text layout when rendering
+        |> put_text_layout({MyApp.LayoutView, "email.text"})
+      end
   """
   def put_text_layout(email, layout) do
     email |> put_private(:text_layout, layout)
@@ -113,11 +131,20 @@ defmodule Bamboo.Phoenix do
 
   @doc """
   Sets the layout for rendering plain text and HTML templates
+
+  ## Example
+
+      def text_and_html_email_layout do
+        new_email
+        |> from("myapp@example.com")
+        # Will use MyApp.LayoutView with email.html and email.text layouts when rendering
+        |> put_layout({MyApp.LayoutView, :email})
+      end
   """
   def put_layout(email, {layout, template}) do
     email
-    |> Bamboo.Phoenix.put_text_layout({layout, to_string(template) <> ".text"})
-    |> Bamboo.Phoenix.put_html_layout({layout, to_string(template) <> ".html"})
+    |> put_text_layout({layout, to_string(template) <> ".text"})
+    |> put_html_layout({layout, to_string(template) <> ".html"})
   end
 
   @doc """
